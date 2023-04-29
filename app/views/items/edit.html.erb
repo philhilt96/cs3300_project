@@ -1,6 +1,31 @@
 <h1>Editing Item</h1>
 
-<%= render 'form', item: @item %>
+<%= form_with(model: @item, local: true) do |form| %>
+  <div class="mb-3">
+    <%= form.label :title, class: "form-label" %>
+    <%= form.text_field :title, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :description, class: "form-label" %>
+    <%= form.text_area :description, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :quantity, class: "form-label" %>
+    <%= form.number_field :quantity, class: "form-control" %>
+  </div>
+
+  <div class="mb-3">
+    <%= form.label :completed, class: "form-check-label" do %>
+      <%= form.check_box :completed, class: "form-check-input" %>
+      Completed
+    <% end %>
+  </div>
+
+  <%= form.submit "Update Item", class: "btn btn-info" %>
+<% end %>
+<br>
 
 <%= link_to 'Show', @item %> |
 <%= link_to 'Back', items_path %>
