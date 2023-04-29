@@ -11,6 +11,9 @@
   </head>
 
   <body>
-    <%= yield %>
+  <%= render 'items/navbar' %>
+  <div class="container">
+   <%= render "items/flash" %>
+   <%= yield %>
   </body>
 </html>

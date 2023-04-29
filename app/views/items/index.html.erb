@@ -1,0 +1,74 @@
+<!-- Variables for progress of items picked up -->
+<% total_num_items = Item.count %>
+<% num_completed_items = Item.where(completed: true).count %>
+<% percentage_picked_up = (num_completed_items.to_f / total_num_items.to_f) * 100 %>
+
+<table class="table table-hover">
+  <thead>
+    <tr>
+      <th>Qty</th>
+      <th>Item</th>
+      <th>Description</th>
+      <th colspan="4"></th>
+    </tr>
+  </thead>
+  
+  <tbody>
+    <% @items.each do |item| %>
+      <% if item.completed %>
+        <tr class=table-secondary>
+          <td>x<%= item.quantity %></td> 
+          <td class="strikethrough"><%= item.title %></td>
+          <td><%= item.description %></td>
+          <td><%= link_to item, method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' } do %>
+            &#128465; Remove
+          <% end %>
+          </td>          
+          <td><%= link_to edit_item_path(item), class: 'btn btn-outline-info' do %>
+            &#x270E; Edit
+          <% end %>
+          </td>
+          <td>
+            <%= form_for(item) do |f| %>
+            <%= f.text_field :description, type: 'hidden' %>
+            <%= f.check_box :completed, :checked => false, :style => 'visibility: hidden '  %>
+            <%= f.submit "Uncross", class: 'btn btn-outline-secondary' %>
+            <% end %>
+          </td>
+        </tr>
+      <% else %>
+        <tr>
+          <td>x<%= item.quantity %></td> 
+          <td><%= item.title %></td>
+          <td><%= item.description %></td>
+          <td><%= link_to item, method: :delete, class: 'btn btn-outline-danger', data: { confirm: 'Are you sure?' } do %>
+            &#128465; Remove
+          <% end %>
+          </td>
+          <td><%= link_to edit_item_path(item), class: 'btn btn-outline-info' do %>
+            &#x270E; Edit
+          <% end %>
+          </td>
+          <td>
+            <%= form_for(item) do |f| %>
+            <%= f.text_field :description, type: 'hidden' %>
+            <%= f.check_box :completed, :checked => true, :style => 'visibility: hidden '  %>
+            <%= f.submit "Cross Off", class: 'btn btn-outline-secondary' %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>  
+    <% end %>
+  </tbody>
+</table>
+<div class="progress">
+  <div class="progress-bar bg-info" role="progressbar" style="width: <%= percentage_picked_up %>%;" aria-valuenow="<%= percentage_picked_up %>" aria-valuemin="0" aria-valuemax="100">
+    <%= number_to_percentage(percentage_picked_up, precision: 0) %>
+  </div>
+</div>
+<p><%= num_completed_items %> of <%= total_num_items %> Items Picked Up</p>
+<br>
+
+<%= link_to 'Add Item', new_item_path, class: 'btn btn-info' %>
+
+
